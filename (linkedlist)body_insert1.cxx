@@ -1,0 +1,74 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node
+{
+	int data;
+	node *tiep;
+};
+
+void duyet_va_in(node *head)
+{
+	while(head!=NULL)
+	{
+		printf("%d ",head->data);
+		head = head->tiep;//Cho head chuyen sang node ke tiep
+	}
+}
+
+void themdau(node **head,node *middle)
+{
+	middle->tiep = *head;
+	*head = middle;
+}
+
+void themcuoi(node **head,int x)
+{
+	node *newnode = (node*)malloc(sizeof(node));
+	newnode->data = x;
+	newnode->tiep = NULL;
+	if(*head==NULL)
+	{
+		*head = newnode;
+		return;
+	}
+	node *temp = *head;
+	while(temp->tiep!=NULL)
+		temp = temp-> tiep;
+	temp->tiep = newnode;
+}
+
+void themgiua(node **head,node **middle2,node *middle,int k)
+{
+	int i = 0;
+	node *temp = *head;
+	while(i<k-2) 
+	{
+		temp = temp->tiep;
+		i++;
+	}
+	temp->tiep = middle;
+	middle->tiep = *middle2;
+}
+
+int main(void)
+{
+	int i, j, x, k;
+	node *head = NULL, *middle, *middle2 = NULL;
+	for(i=1;i<11;i++) themcuoi(&head,i);
+	duyet_va_in(head);
+	printf("\nNhap gia tri can chen: ");
+	scanf("%d",&x);
+	printf("Nhap vi tri chen: ");
+	scanf("%d",&k);
+	middle = (node*)malloc(sizeof(node));
+	middle->data = x;
+	middle->tiep = NULL;
+	if(k==1) themdau(&head,middle);
+	else
+	{
+		for(j=k;j<i;j++) themcuoi(&middle2,j);
+		themgiua(&head,&middle2,middle,k);
+	}
+	duyet_va_in(head);
+}
